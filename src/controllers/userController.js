@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import ms from "ms";
+import { JwtProvider } from "~/providers/JwtProvider";
 
 const MOCK_DATABASE = {
   USER: {
@@ -15,8 +16,8 @@ const MOCK_DATABASE = {
  * Ở đây mình làm Demo thôi nên mới đặt biến const và giá trị random ngẫu nhiên trong code nhé.
  * Xem thêm về biến môi trường: https://youtu.be/Vgr3MWb7aOw
  */
-const ACCESS_TOKEN_SECRET_SIGNATURE = "KBgJwUETt4HeVD05WaXXI9V3JnwCVP";
-const REFRESH_TOKEN_SECRET_SIGNATURE = "fcCjhnpeopVn2Hg1jG75MUi62051yL";
+const ACCESS_TOKEN_SECRET_SIGNATURE = "KBgJwUETt4HeVD05WaXXI9V3JnwCVA";
+const REFRESH_TOKEN_SECRET_SIGNATURE = "fcCjhnpeopVn2Hg1jG75MUi62051yA";
 
 const login = async (req, res) => {
   try {
@@ -31,8 +32,46 @@ const login = async (req, res) => {
     }
 
     // Trường hợp nhập đúng thông tin tài khoản, tạo token và trả về cho phía Client
+    const userInfo = {
+      id: MOCK_DATABASE.USER.ID,
+      email: MOCK_DATABASE.USER.EMAIL,
+    };
 
-    res.status(StatusCodes.OK).json({ message: "Login API success!" });
+    // //tạo ra 2 loại token, accessToken và refreshToken để trả về cho phía FE
+    const accessToken = await JwtProvider.generateToken(
+      userInfo,
+      ACCESS_TOKEN_SECRET_SIGNATURE,
+      "1h"
+    );
+
+    const refreshToken = await JwtProvider.generateToken(
+      userInfo,
+      REFRESH_TOKEN_SECRET_SIGNATURE,
+      "14 days"
+    );
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: ms("14 days"),
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: ms("14 days"),
+    });
+
+    // trả về thông tin user cũng như trả về Tokens cho trường hợp phía FE cần lưu Tokens vào Localstorage
+
+    res.status(StatusCodes.OK).json({
+      ...userInfo,
+      accessToken,
+      refreshToken,
+      // message: "Logout API success!",
+    });
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
   }
