@@ -1,6 +1,10 @@
 import { StatusCodes } from "http-status-codes";
 import ms from "ms";
-import { JwtProvider } from "~/providers/JwtProvider";
+import {
+  ACCESS_TOKEN_SECRET_SIGNATURE,
+  JwtProvider,
+  REFRESH_TOKEN_SECRET_SIGNATURE,
+} from "~/providers/JwtProvider";
 
 const MOCK_DATABASE = {
   USER: {
@@ -9,15 +13,6 @@ const MOCK_DATABASE = {
     PASSWORD: "trungquandev@123",
   },
 };
-
-/**
- * 2 cái chữ ký bí mật quan trọng trong dự án. Dành cho JWT - Jsonwebtokens
- * Lưu ý phải lưu vào biến môi trường ENV trong thực tế cho bảo mật.
- * Ở đây mình làm Demo thôi nên mới đặt biến const và giá trị random ngẫu nhiên trong code nhé.
- * Xem thêm về biến môi trường: https://youtu.be/Vgr3MWb7aOw
- */
-const ACCESS_TOKEN_SECRET_SIGNATURE = "KBgJwUETt4HeVD05WaXXI9V3JnwCVA";
-const REFRESH_TOKEN_SECRET_SIGNATURE = "fcCjhnpeopVn2Hg1jG75MUi62051yA";
 
 const login = async (req, res) => {
   try {
