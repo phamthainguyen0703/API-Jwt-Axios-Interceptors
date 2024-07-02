@@ -9,7 +9,7 @@ import {
 const isAuthorized = async (req, res, next) => {
   //cách 1: lấy accesstoken nằm trong req cookies phía client - withCredentials trong file authorizeAxios và credentials trong CORS
   const accessTokenFromCookie = req.cookies?.accessToken;
-  console.log("accessTokenFromCookie: ", accessTokenFromCookie);
+  // console.log("accessTokenFromCookie: ", accessTokenFromCookie);
   if (!accessTokenFromCookie) {
     res
       .status(StatusCodes.UNAUTHORIZED)
