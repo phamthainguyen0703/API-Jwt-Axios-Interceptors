@@ -36,7 +36,8 @@ const login = async (req, res) => {
     const accessToken = await JwtProvider.generateToken(
       userInfo,
       ACCESS_TOKEN_SECRET_SIGNATURE,
-      "1h"
+      // "1h"
+      5
     );
 
     const refreshToken = await JwtProvider.generateToken(
@@ -87,7 +88,7 @@ const logout = async (req, res) => {
 const refreshToken = async (req, res) => {
   try {
     // cách 1: lấy refreshToken từ cookie đã đính kèm vào request
-    const refreshTokenFromCookie = req.cookies?.refreshToken;
+    // const refreshTokenFromCookie = req.cookies?.refreshToken;
 
     // cách 2: lấy từ localStorage phía FE sẽ truyền vào body khi gọi API
     const refreshTokenFromBody = req.body?.refreshToken;
@@ -109,7 +110,8 @@ const refreshToken = async (req, res) => {
     const accessToken = await JwtProvider.generateToken(
       userInfo,
       ACCESS_TOKEN_SECRET_SIGNATURE,
-      "1h"
+      5
+      // "1h"
     );
 
     // res lại cookie accessToken mới cho trường hợp sử dụng cookie
@@ -123,7 +125,7 @@ const refreshToken = async (req, res) => {
     //trả về accessToken mới cho FE trong trường hợp cần update lại trong localStorage
     res.status(StatusCodes.OK).json({ accessToken });
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: "refreshToken API failed" });
