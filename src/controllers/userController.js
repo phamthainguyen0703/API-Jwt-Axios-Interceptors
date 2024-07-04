@@ -8,9 +8,9 @@ import {
 
 const MOCK_DATABASE = {
   USER: {
-    ID: "trungquandev-sample-id-12345678",
-    EMAIL: "trungquandev.official@gmail.com",
-    PASSWORD: "trungquandev@123",
+    ID: "phamthainguyen-sample-id-12345678",
+    EMAIL: "phamthainguyen0703@gmail.com",
+    PASSWORD: "phamthainguyen@123",
   },
 };
 
